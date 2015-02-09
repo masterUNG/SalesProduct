@@ -1,5 +1,6 @@
 package appewtc.masterung.salesproduct;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
@@ -9,6 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -26,11 +29,15 @@ import java.io.InputStreamReader;
 public class MainActivity extends ActionBarActivity {
 
     private SalesTABLE objSalesTABLE;
+    private EditText edtUser, edtPassword;
+    private String strUserChoose, strPasswordChoose, strPasswordTrue, strName, strStatus, strLastAccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        bindWidget();
 
         objSalesTABLE = new SalesTABLE(this);
 
@@ -44,6 +51,92 @@ public class MainActivity extends ActionBarActivity {
         synJSONtoSQLite();
 
     }   // onCreate
+
+    private void bindWidget() {
+        edtUser = (EditText) findViewById(R.id.edtUser);
+        edtPassword = (EditText) findViewById(R.id.edtPassword);
+    }
+
+    public void clickLogin(View view) {
+
+        strUserChoose = edtUser.getText().toString().trim();
+        strPasswordChoose = edtPassword.getText().toString().trim();
+
+        if (strUserChoose.equals("") || strPasswordChoose.equals("") ) {
+
+            MyAlertDialog objMyAlert = new MyAlertDialog();
+            objMyAlert.negativeDialog(MainActivity.this, "Have Space", "Please Fill All Blank");
+
+        } else {
+
+            checkUser();
+
+        }
+
+
+
+
+    }   //clickLogin
+
+    private void checkUser() {
+
+        try {
+
+            String arrayDATA[] = objSalesTABLE.searchUser(strUserChoose);
+            strPasswordTrue = arrayDATA[2];
+            strName = arrayDATA[3];
+            strStatus = arrayDATA[4];
+            strLastAccess = arrayDATA[5];
+
+            checkPassword();
+
+
+        } catch (Exception e) {
+            MyAlertDialog objMyAlert = new MyAlertDialog();
+            objMyAlert.negativeDialog(MainActivity.this, "No User", "No this User in my Database");
+        }
+
+    }   // checkUser
+
+    private void checkPassword() {
+
+        if (strPasswordChoose.equals(strPasswordTrue)) {
+
+            checkStatus();
+
+        } else {
+            MyAlertDialog objMyAlert = new MyAlertDialog();
+            objMyAlert.negativeDialog(MainActivity.this, "Password False", "Password Incorrect");
+        }
+
+    }   // checkPassword
+
+    private void checkStatus() {
+
+        int intStatus = Integer.parseInt(strStatus);
+        switch (intStatus) {
+            case 0:
+                MyAlertDialog objMyAlert = new MyAlertDialog();
+                objMyAlert.negativeDialog(MainActivity.this, "Contact Admin", "Please contact your administrator");
+                break;
+            case 1:
+
+                Intent objIntent = new Intent(MainActivity.this, ServiceActivity.class);
+                objIntent.putExtra("Name", strName);
+                startActivity(objIntent);
+                finish();
+
+                break;
+        }
+
+    }   // checkStatus
+
+    public void clickClear(View view) {
+
+        edtUser.setText("");
+        edtPassword.setText("");
+
+    }   //clickClear
 
     private void deleteAllSQLite() {
 

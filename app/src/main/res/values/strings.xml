@@ -5,4 +5,6 @@
     <string name="action_settings">Settings</string>
     <string name="test_thai">ทดสอบภาษาไทย</string>
     <string name="test_thai2">นี่ก็ภาษาไทย</string>
+    <string name="login">Login</string>
+    <string name="title_activity_service">ServiceActivity</string>
 </resources>
