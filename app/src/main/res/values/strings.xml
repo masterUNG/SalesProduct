@@ -3,4 +3,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="test_thai">ทดสอบภาษาไทย</string>
+    <string name="test_thai2">นี่ก็ภาษาไทย</string>
 </resources>
