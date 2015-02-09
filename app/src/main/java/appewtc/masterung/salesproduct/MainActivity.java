@@ -8,11 +8,16 @@ import android.view.MenuItem;
 
 public class MainActivity extends ActionBarActivity {
 
+    private SalesTABLE objSalesTABLE;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
+
+        objSalesTABLE = new SalesTABLE(this);
+
+    }   // onCreate
 
 
     @Override
@@ -36,4 +41,4 @@ public class MainActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-}
+}   // Main Class
